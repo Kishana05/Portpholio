@@ -71,29 +71,51 @@ p, .skill-tag, .contact-info {
   --card-border-radius: 12px;
   --background-pattern-opacity: 0.05;
   
+  /* Font Properties */
+  --body-font: 'Inter', sans-serif;
+  --heading-font: 'Montserrat', sans-serif;
+  --font-size-base: 1rem;
+  --line-height-relaxed: 1.6;
+  --line-height-tight: 1.2;
+  --letter-spacing-tight: -0.01em;
+  --letter-spacing-wide: 0.025em;
+  
+  /* Transition Properties */
+  --transition-quick: 0.2s;
+  --transition-medium: 0.3s;
+  --transition-slow: 0.5s;
+  --transition-curve: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --button-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --hover-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  
+  /* Light Mode Colors (Default) */
+  --bg-color: #f3f3f5; /* Slightly off-white background */
+  --bg-secondary: #F2F4F8; /* Light gray secondary background */
+  --text-primary: #333333; /* Dark gray for main text */
+  --text-secondary: #555555; /* Medium gray for secondary text */
+  --text-muted: #777777; /* Lighter gray for less important text */
+  --primary-color: #3366CC; /* Blue primary */
+  --secondary-color: #E25822; /* Orange/Red secondary */
+  --accent-color: #6633CC; /* Purple accent */
+  --primary-color-rgb: 51, 102, 204;
+  --secondary-color-rgb: 226, 88, 34;
+  --accent-color-rgb: 102, 51, 204;
+  --nav-bg: rgba(251, 251, 253, 0.95);
+  --nav-active: var(--primary-color);
+  --nav-hover: var(--accent-color);
+  --pixel-color: #d2d9e0;
+  
   /* Enhanced Gradients */
   --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   --gradient-secondary: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
   --gradient-text: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
   --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
   --highlight-shadow: 0 5px 15px rgba(var(--primary-color-rgb), 0.3);
-  
-  /* Updated color scheme to match screenshot */
-  --bg-color: #0A0A0A; /* Dark background */
-  --bg-secondary: #111111;
-  --text-primary: #FFFFFF;
-  --text-secondary: #E2E8F0;
-  --text-muted: #94A3B8;
-  --primary-color: #FFFFFF; /* White */
-  --secondary-color: #E25822; /* Orange/Red */
-  --accent-color: #E25822; /* Orange/Red */
-  --primary-color-rgb: 255, 255, 255;
-  --secondary-color-rgb: 226, 88, 34; 
-  --accent-color-rgb: 226, 88, 34;
-  --nav-bg: rgba(255, 255, 255, 0.98);
-  --nav-active: #4F46E5;
-  --nav-hover: #7C3AED;
-  --pixel-color: #d2d9e0;
   --bg-pattern: radial-gradient(circle at 90% 10%, rgba(var(--accent-color-rgb), 0.08) 0%, transparent 20%), 
                 radial-gradient(circle at 10% 90%, rgba(var(--primary-color-rgb), 0.08) 0%, transparent 20%);
   
@@ -105,27 +127,31 @@ p, .skill-tag, .contact-info {
 @media (prefers-color-scheme: dark) {
   /* This only applies if user hasn't explicitly set a preference */
   body:not(.light-mode):not(.dark-mode) {
-    /* Dark mode colors */
-    --primary-color: #81C7D4;
-    --primary-color-rgb: 129, 199, 212;
-    --secondary-color: #FF8E8E;
-    --secondary-color-rgb: 255, 142, 142;
-    --accent-color: #9D8CFF;
+    /* Dark mode colors - using our standardized dark mode colors */
+    --bg-color: #121212; /* Dark background with slight warmth */
+    --bg-secondary: #1E1E1E; /* Slightly lighter for secondary areas */
+    --text-primary: #F0F6FC; /* Slightly off-white for main text */
+    --text-secondary: #D1D5DB; /* Light gray for secondary text */
+    --text-muted: #9CA3AF; /* Medium gray for less important text */
+    --primary-color: #4F8ED2; /* Softer blue primary */
+    --secondary-color: #E25822; /* Orange/Red secondary */
+    --accent-color: #9D8CFF; /* Purple accent */
+    --primary-color-rgb: 79, 142, 210;
+    --secondary-color-rgb: 226, 88, 34;
     --accent-color-rgb: 157, 140, 255;
     
-    --bg-color: #1A202C;
-    --bg-secondary: #2D3748;
-    --text-primary: #F7FAFC;
-    --text-secondary: #E2E8F0;
-    --text-muted: #A0AEC0;
-    
-    --nav-bg: rgba(26, 32, 44, 0.95);
-    --nav-active: #81C7D4;
-    --nav-hover: #FF8E8E;
+    --nav-bg: rgba(18, 18, 18, 0.95);
+    --nav-active: var(--primary-color);
+    --nav-hover: var(--secondary-color);
     
     /* Additional background variables for consistency */
     --bg-primary: var(--bg-color);
     --highlight-color: var(--secondary-color);
+    
+    /* Update shadow colors for dark mode */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
     
     background-color: var(--bg-color);
     color: var(--text-primary);
@@ -135,22 +161,31 @@ p, .skill-tag, .contact-info {
 /* Direct dark mode styles that don't rely on CSS variables */
 /* Dark mode must be applied with the highest specificity possible */
 html body.dark-mode {
-  /* Set CSS variables with high specificity */
-  --bg-color: #0D1117 !important;
-  --bg-secondary: #161B22 !important;
-  --text-primary: #F0F6FC !important;
-  --text-secondary: #C9D1D9 !important;
-  --text-muted: #8B949E !important;
-  --nav-bg: rgba(13, 17, 23, 0.95) !important;
-  --nav-active: #58A6FF !important;
-  --nav-hover: #79C0FF !important;
-  --primary-color: #58A6FF !important;
-  --secondary-color: #79C0FF !important;
-  --accent-color: #7EE787 !important;
-  --primary-color-rgb: 88, 166, 255 !important;
-  --secondary-color-rgb: 121, 192, 255 !important;
-  --accent-color-rgb: 126, 231, 135 !important;
-  --pixel-color: #4d5b66 !important;
+  /* Set CSS variables with high specificity - using standardized dark palette */
+  --bg-color: #121212 !important; /* Dark background with slight warmth */
+  --bg-secondary: #1E1E1E !important; /* Slightly lighter for secondary areas */
+  --text-primary: #F0F6FC !important; /* Slightly off-white for main text */
+  --text-secondary: #D1D5DB !important; /* Light gray for secondary text */
+  --text-muted: #9CA3AF !important; /* Medium gray for less important text */
+  --primary-color: #4F8ED2 !important; /* Softer blue primary */
+  --primary-color-rgb: 79, 142, 210 !important;
+  --secondary-color: #E25822 !important; /* Orange/Red secondary */
+  --secondary-color-rgb: 226, 88, 34 !important;
+  --accent-color: #9D8CFF !important; /* Purple accent */
+  --accent-color-rgb: 157, 140, 255 !important;
+  
+  /* Navigation colors */
+  --nav-bg: rgba(18, 18, 18, 0.95) !important;
+  --nav-active: var(--primary-color) !important;
+  --nav-hover: var(--secondary-color) !important;
+  --pixel-color: #30363D !important;
+  
+  /* Update shadow colors for dark mode */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4) !important;
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5) !important;
+  --button-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+  --hover-shadow: 0 6px 10px rgba(0, 0, 0, 0.4) !important;
   
   /* Updated pattern for dark mode */
   --bg-pattern: radial-gradient(circle at 10% 20%, rgba(88, 166, 255, 0.05) 0%, transparent 20%),

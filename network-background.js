@@ -20,9 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const ctx = canvas.getContext('2d');
     const nodes = [];
-    const nodeCount = 200; // Maximum node count for ultra-dense network
-    const connectionDistance = 280; // Extended connection distance for more connections
-    const mouseInfluenceRadius = 300; // Mouse influence radius
+    const nodeCount = 300; // Increased node count for even denser network
+    const connectionDistance = 350; // Increased connection distance for more connections
+    const mouseInfluenceRadius = 400; // Increased mouse influence radius
     let particleEffect = true; // Particle burst effect enabled by default
     let mouseX = 0;
     let mouseY = 0;
@@ -40,25 +40,25 @@ document.addEventListener('DOMContentLoaded', function() {
         nodes.length = 0;
         // Create different sized nodes for more visual interest
         for (let i = 0; i < nodeCount; i++) {
-            // Create some larger, brighter nodes as focal points
-            const isFocalNode = Math.random() < 0.1; // 10% chance of being a focal node
+            // Create more larger, brighter nodes as focal points
+            const isFocalNode = Math.random() < 0.2; // 20% chance of being a focal node
             
             nodes.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                radius: isFocalNode ? Math.random() * 3 + 2 : Math.random() * 2 + 1,
-                vx: Math.random() * 0.3 - 0.15,
-                vy: Math.random() * 0.3 - 0.15,
+                radius: isFocalNode ? Math.random() * 4 + 3 : Math.random() * 2.5 + 1.5, // Larger node radius
+                vx: Math.random() * 0.35 - 0.175, // Slightly faster movement
+                vy: Math.random() * 0.35 - 0.175,
                 connected: [],
-                color: isFocalNode ? '#FF7E45' : '#E25822', // Brighter orange for focal nodes
-                glowSize: isFocalNode ? 4 : 2.5,
-                opacity: isFocalNode ? 1 : 0.8,
-                // Add slight pulsing effect
+                color: isFocalNode ? '#FF9966' : '#E25822', // Brighter orange for focal nodes
+                glowSize: isFocalNode ? 6 : 3.5, // Increased glow effect
+                opacity: isFocalNode ? 1 : 0.85, // Higher base opacity
+                // Enhanced pulsing effect
                 pulse: {
-                    active: Math.random() < 0.3, // 30% of nodes pulse
-                    min: 0.7,
+                    active: Math.random() < 0.5, // 50% of nodes pulse
+                    min: 0.65,
                     max: 1.0,
-                    speed: 0.01 + (Math.random() * 0.02),
+                    speed: 0.015 + (Math.random() * 0.025), // Faster pulsing
                     value: Math.random(),
                     direction: 1
                 }
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Highlight nodes influenced by mouse
                     if (distance < mouseInfluenceRadius * 0.3) {
                         node.color = '#FF7E45'; // Briefly highlight closer nodes
-                        node.glowSize = 3.5; // Temporarily increase glow
+                        node.glowSize = 5; // Temporarily increase glow
                     }
                 }
             }
@@ -227,36 +227,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Draw connections between nodes
     function drawConnections() {
-        nodes.forEach((node, i) => {
-            node.connected.forEach(j => {
-                const otherNode = nodes[j];
-                const dx = otherNode.x - node.x;
-                const dy = otherNode.y - node.y;
+        // Clear connections
+        for (let i = 0; i < nodes.length; i++) {
+            nodes[i].connected = [];
+        }
+        
+        // Draw connections between nodes that are close enough
+        for (let i = 0; i < nodes.length; i++) {
+            const nodeA = nodes[i];
+            
+            for (let j = i + 1; j < nodes.length; j++) {
+                const nodeB = nodes[j];
+                
+                // Calculate distance between nodes
+                const dx = nodeB.x - nodeA.x;
+                const dy = nodeB.y - nodeA.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
-                // Calculate opacity based on distance
-                const opacity = Math.pow(1 - (distance / connectionDistance), 1.8); // Steeper falloff for more dramatic effect
-                
-                // Use brighter colors for closer connections
-                const startColor = distance < 100 ? '#FF7E45' : '#E25822';
-                const endColor = distance < 100 ? '#E25822' : '#A73C12';
-                
-                // Gradient lines for better visibility
-                const gradient = ctx.createLinearGradient(node.x, node.y, otherNode.x, otherNode.y);
-                gradient.addColorStop(0, `rgba(${hexToRgb(startColor)}, ${opacity})`);
-                gradient.addColorStop(1, `rgba(${hexToRgb(endColor)}, ${opacity * 0.7})`);
-                
-                // Vary line width based on node size and distance
-                const lineWidth = Math.min(node.radius, otherNode.radius) * 0.3 + 0.3;
-                ctx.lineWidth = distance < 100 ? lineWidth * 1.5 : lineWidth;
-                
-                ctx.strokeStyle = gradient;
-                ctx.beginPath();
-                ctx.moveTo(node.x, node.y);
-                ctx.lineTo(otherNode.x, otherNode.y);
-                ctx.stroke();
-            });
-        });
+                if (distance < connectionDistance) {
+                    // Track connection
+                    nodeA.connected.push(j);
+                    nodeB.connected.push(i);
+                    
+                    // Calculate opacity based on distance (increased minimum opacity)
+                    const opacity = Math.max(0.2, (1 - distance / connectionDistance) * 0.7);
+                    
+                    // Determine line width based on distance (thicker for closer nodes)
+                    const lineWidth = Math.max(0.5, (1 - distance / connectionDistance) * 1.5);
+                    
+                    // Draw line with gradient
+                    ctx.beginPath();
+                    ctx.moveTo(nodeA.x, nodeA.y);
+                    ctx.lineTo(nodeB.x, nodeB.y);
+                    ctx.strokeStyle = `rgba(226, 88, 34, ${opacity})`;
+                    ctx.lineWidth = lineWidth;
+                    ctx.stroke();
+                }
+            }
+        }
     }
     
     // Convert hex color to rgb string
@@ -274,8 +282,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Draw nodes
     function drawNodes() {
-        nodes.forEach(node => {
-            // Update pulse effect
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
+            
+            // Update node pulse effect if active - enhanced pulsing
             if (node.pulse && node.pulse.active) {
                 node.pulse.value += node.pulse.speed * node.pulse.direction;
                 if (node.pulse.value >= 1) {
@@ -286,17 +296,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     node.pulse.direction = 1;
                 }
                 
-                // Calculate current opacity based on pulse with enhanced contrast
-                const pulseOpacity = node.pulse.min + (node.pulse.max - node.pulse.min) * node.pulse.value;
-                // Apply a quadratic curve to make the pulse more pronounced
-                const enhancedPulse = Math.pow(pulseOpacity, 1.5);
-                node.currentOpacity = node.opacity * enhancedPulse;
+                // Calculate current opacity based on pulse with stronger effect
+                node.currentOpacity = node.pulse.min + (node.pulse.max - node.pulse.min) * node.pulse.value;
+                // Apply more dynamic radius based on pulse
+                node.currentRadius = node.radius * (0.85 + node.pulse.value * 0.3);
             } else {
                 node.currentOpacity = node.opacity;
+                node.currentRadius = node.radius;
             }
             
             // Add enhanced glow effect to nodes
-            const glowSize = node.glowSize || 3.5; // Larger default glow
+            const glowSize = node.glowSize || 5; // Larger default glow
             const glowRadius = node.radius * glowSize;
             // Add extra glow for nodes near mouse
             const isNearMouse = mouseX && mouseY && 
@@ -320,27 +330,31 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.fillStyle = gradient;
             ctx.beginPath();
             ctx.arc(node.x, node.y, glowRadius, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Draw node core
-            ctx.fillStyle = nodeColor;
+            // Draw node with enhanced shadow glow
+            const rgb = hexToRgb(node.color);
+            ctx.shadowColor = node.color;
+            ctx.shadowBlur = node.glowSize * (node.pulse && node.pulse.active ? (0.8 + node.pulse.value * 0.5) : 1);
             ctx.beginPath();
-            ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-            ctx.fill();
             
+            // Use current radius if available, otherwise use base radius
+            const displayRadius = node.currentRadius || node.radius;
+            
+            ctx.arc(node.x, node.y, displayRadius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${rgb}, ${node.currentOpacity})`;
+            ctx.fill();
             // Draw highlight on top of node for more 3D look
             const highlight = ctx.createRadialGradient(
                 node.x - node.radius * 0.3, node.y - node.radius * 0.3, 0,
                 node.x, node.y, node.radius
             );
-            highlight.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+            highlight.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
             highlight.addColorStop(1, 'rgba(255, 255, 255, 0)');
             
             ctx.fillStyle = highlight;
             ctx.beginPath();
             ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
             ctx.fill();
-        });
+        }
     }
 
     // Track mouse for interaction with increased sensitivity
@@ -375,30 +389,30 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Create automatic particles around mouse even without clicks
     setInterval(() => {
-        if (particleEffect && mouseX && mouseY && Math.random() < 0.3) {
+        if (particleEffect && mouseX && mouseY && Math.random() < 0.4) { // Increased probability
             // Occasionally create small bursts automatically
-            const miniCount = 3 + Math.floor(Math.random() * 4);
+            const miniCount = 4 + Math.floor(Math.random() * 5); // More particles
             for (let i = 0; i < miniCount; i++) {
                 const angle = Math.random() * Math.PI * 2;
-                const distance = 30 + Math.random() * 60;
-                const speed = 0.5 + Math.random() * 1.5;
+                const distance = 30 + Math.random() * 80; // Larger spread
+                const speed = 0.7 + Math.random() * 1.8; // Faster movement
                 
                 nodes.push({
                     x: mouseX + Math.cos(angle) * distance,
                     y: mouseY + Math.sin(angle) * distance,
-                    radius: Math.random() * 1.5 + 0.8,
-                    vx: Math.cos(angle) * speed * 0.5,
-                    vy: Math.sin(angle) * speed * 0.5,
+                    radius: Math.random() * 2.5 + 1.2, // Larger particles
+                    vx: Math.cos(angle) * speed * 0.6,
+                    vy: Math.sin(angle) * speed * 0.6,
                     connected: [],
                     color: '#FF9D6C',
-                    glowSize: 3,
-                    opacity: 0.7,
-                    lifespan: 40,
-                    fade: { active: true, speed: 0.03 }
+                    glowSize: 4.5, // Increased glow
+                    opacity: 0.85, // Higher opacity
+                    lifespan: 60, // Longer lifespan
+                    fade: { active: true, speed: 0.025 }
                 });
             }
         }
-    }, 300); // Every 300ms check if we should create particles
+    }, 250); // More frequent checks
     
     // Create particle burst on click
     document.addEventListener('click', (e) => {
