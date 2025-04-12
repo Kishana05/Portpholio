@@ -28,18 +28,18 @@ function initParticles() {
     // Get canvas context
     const ctx = canvas.getContext('2d');
 
-    // Configuration
+    // Configuration - adjusted to complement network background
     const config = {
-        particleCount: 120,
-        particleColor: '#4a89dc', // Blue hue similar to modern portfolios
-        lineColor: 'rgba(74, 137, 220, 0.3)',
-        particleRadius: 1.5,
-        lineWidth: 0.5,
-        mouseRadius: 150,
-        speed: 0.5,
+        particleCount: 80, // Reduced count to avoid overwhelming with network background
+        particleColor: '#4a89dc', // Blue hue to complement orange network
+        lineColor: 'rgba(74, 137, 220, 0.2)', // Reduced opacity
+        particleRadius: 1.2, // Slightly smaller particles
+        lineWidth: 0.4, // Thinner lines
+        mouseRadius: 180, // Increased interaction radius
+        speed: 0.4, // Slightly slower
         direction: {
-            x: 0.3,
-            y: 0.5
+            x: 0.25,
+            y: 0.4
         },
         interactive: true
     };
@@ -95,7 +95,7 @@ function initParticles() {
     // Draw particles
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.globalCompositeOperation = 'lighter';
+        ctx.globalCompositeOperation = 'screen'; // Changed to 'screen' for better blending with network
 
         // Draw particles
         for (let i = 0; i < particles.length; i++) {
