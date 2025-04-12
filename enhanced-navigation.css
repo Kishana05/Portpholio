@@ -163,7 +163,6 @@
   padding: 2rem 0;
   z-index: 1000;
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.0);
-  border-left: 1px solid rgba(226, 88, 34, 0.2); /* Red accent */
   box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(12px); /* Increased blur for glass effect */
   -webkit-backdrop-filter: blur(12px);
@@ -171,7 +170,6 @@
 
 body:not(.dark-mode) .sidebar-nav {
   background-color: rgba(0, 0, 0, 0.7); /* Black with opacity */
-  border-left: 1px solid rgba(226, 88, 34, 0.3); /* Red accent */
   box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -191,37 +189,25 @@ body:not(.dark-mode) .sidebar-nav {
   position: relative;
   display: flex;
   justify-content: center;
+  margin-bottom: 5px;
 }
 
-.sidebar-nav li::before {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 60%;
-  background: #E25822; /* Red accent always */
-  border-radius: 4px 0 0 4px;
-  transition: width 0.3s ease;
-  opacity: 0.8;
-}
 
-.sidebar-nav li.active::before {
-  width: 4px;
-  background: #E25822; /* Always red indicator */
-}
+
+
 
 .sidebar-nav a {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px 0;
+  padding: 12px 0;
   text-decoration: none;
   color: var(--text-secondary);
   width: 100%;
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 body:not(.dark-mode) .sidebar-nav a {
@@ -238,7 +224,8 @@ body:not(.dark-mode) .sidebar-nav li.active a {
 }
 
 .sidebar-nav li.active a {
-  color: var(--primary-color);
+  color: #E25822; /* Red color for active item */
+  background: rgba(226, 88, 34, 0.15); /* Subtle background highlight */
 }
 
 .sidebar-nav i {
@@ -246,6 +233,22 @@ body:not(.dark-mode) .sidebar-nav li.active a {
   margin-bottom: 5px;
   transition: all 0.3s ease;
   position: relative;
+}
+
+.sidebar-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: #E25822;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.sidebar-nav li.active a::after {
+  width: 40px;
 }
 
 /* Make home icon larger */
@@ -283,24 +286,9 @@ body:not(.dark-mode) .sidebar-nav li.active a {
   100% { transform: scale(1.15); }
 }
 
-.sidebar-nav li a[aria-label="Home section"] i::after {
-  content: '';
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: var(--secondary-color);
-  border-radius: 50%;
-  top: -4px;
-  right: -4px;
-  opacity: 0;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 10px rgba(var(--secondary-color-rgb), 0.7);
-}
 
-.sidebar-nav li.active a[aria-label="Home section"] i::after,
-.sidebar-nav li a[aria-label="Home section"]:hover i::after {
-  opacity: 1;
-}
+
+
 
 /* Responsive navigation */
 @media (max-width: 768px) {
